@@ -2,6 +2,7 @@ package com.pm.patientservice.service;
 
 import com.pm.patientservice.dto.PatientRequestDTO;
 import com.pm.patientservice.dto.PatientResponseDTO;
+import com.pm.patientservice.dto.PatientUpdateRequestDTO;
 import com.pm.patientservice.exception.EmailAlreadyExistsException;
 import com.pm.patientservice.exception.PatientNotFoundException;
 import com.pm.patientservice.mapper.PatientMapper;
@@ -35,16 +36,23 @@ public class PatientService {
         return PatientMapper.toDTO(newPatient);
     }
 
-    public PatientResponseDTO updatePatient(UUID id, PatientRequestDTO patientRequestDTO) {
-        Patient patient = patientRepository.findById(id).orElseThrow(() -> new PatientNotFoundException("Patient not found with ID: "+ id));
-        if (patientRepository.existsByEmail(patientRequestDTO.getEmail())) {
-            throw new EmailAlreadyExistsException("A patient with this email already exists: " + patientRequestDTO.getEmail());
+    public PatientResponseDTO updatePatient(UUID id, PatientUpdateRequestDTO patientUpdateRequestDTO) {
+        Patient patient = patientRepository.findById(id).orElseThrow(() -> new PatientNotFoundException("Patient not found with ID: " + id));
+        if (patientUpdateRequestDTO.getEmail() != null) {
+            if (patientRepository.existsByEmailAndIdNot(patientUpdateRequestDTO.getEmail(), id)) {
+                throw new EmailAlreadyExistsException("A patient with this email already exists: " + patientUpdateRequestDTO.getEmail());
+            }
+            patient.setEmail(patientUpdateRequestDTO.getEmail());
         }
-
-        patient.setName(patientRequestDTO.getName());
-        patient.setAddress(patientRequestDTO.getAddress());
-        patient.setEmail(patientRequestDTO.getEmail());
-        patient.setDateOfBirth(LocalDate.parse(patientRequestDTO.getDateOfBirth()));
+        if (patientUpdateRequestDTO.getName() != null) {
+            patient.setName(patientUpdateRequestDTO.getName());
+        }
+        if (patientUpdateRequestDTO.getAddress() != null) {
+            patient.setAddress(patientUpdateRequestDTO.getAddress());
+        }
+        if (patientUpdateRequestDTO.getDateOfBirth() != null) {
+            patient.setDateOfBirth(LocalDate.parse(patientUpdateRequestDTO.getDateOfBirth()));
+        }
 
         Patient updatedPatient = patientRepository.save(patient);
         return PatientMapper.toDTO(updatedPatient);

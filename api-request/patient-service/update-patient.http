@@ -3,10 +3,8 @@ PUT http://localhost:4000/patients/123e4567-e89b-12d3-a456-426614174000
 Content-Type: application/json
 
 {
-  "name": "Md Suhail",
-  "email": "md.suhail@example.com",
-  "address": "302 Panvel main street",
-  "dateOfBirth": "2001-02-01"
+  "email": "",
+  "address": "3rd Panvel main street"
 }
 
 ###

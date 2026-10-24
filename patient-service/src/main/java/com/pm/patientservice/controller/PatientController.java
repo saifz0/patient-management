@@ -2,6 +2,7 @@ package com.pm.patientservice.controller;
 
 import com.pm.patientservice.dto.PatientRequestDTO;
 import com.pm.patientservice.dto.PatientResponseDTO;
+import com.pm.patientservice.dto.PatientUpdateRequestDTO;
 import com.pm.patientservice.dto.validators.CreatePatientValidationGroup;
 import com.pm.patientservice.service.PatientService;
 import jakarta.validation.groups.Default;
@@ -38,8 +39,8 @@ public class PatientController {
 
     @PutMapping("/{id}")
     public ResponseEntity<PatientResponseDTO> updatePatient(@PathVariable UUID id, @Validated(Default.class)
-    @RequestBody PatientRequestDTO patientRequestDTO) {
-        PatientResponseDTO patientResponseDTO = patientService.updatePatient(id, patientRequestDTO);
+    @RequestBody PatientUpdateRequestDTO patientUpdateRequestDTO) {
+        PatientResponseDTO patientResponseDTO = patientService.updatePatient(id, patientUpdateRequestDTO);
         return ResponseEntity.ok().body(patientResponseDTO);
     }
 
