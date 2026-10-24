@@ -38,19 +38,19 @@ public class PatientService {
 
     public PatientResponseDTO updatePatient(UUID id, PatientUpdateRequestDTO patientUpdateRequestDTO) {
         Patient patient = patientRepository.findById(id).orElseThrow(() -> new PatientNotFoundException("Patient not found with ID: " + id));
-        if (patientUpdateRequestDTO.getEmail() != null) {
+        if (patientUpdateRequestDTO.getEmail() != null && !patientUpdateRequestDTO.getEmail().isBlank()) {
             if (patientRepository.existsByEmailAndIdNot(patientUpdateRequestDTO.getEmail(), id)) {
                 throw new EmailAlreadyExistsException("A patient with this email already exists: " + patientUpdateRequestDTO.getEmail());
             }
             patient.setEmail(patientUpdateRequestDTO.getEmail());
         }
-        if (patientUpdateRequestDTO.getName() != null) {
+        if (patientUpdateRequestDTO.getName() != null && !patientUpdateRequestDTO.getName().isBlank()) {
             patient.setName(patientUpdateRequestDTO.getName());
         }
-        if (patientUpdateRequestDTO.getAddress() != null) {
+        if (patientUpdateRequestDTO.getAddress() != null && !patientUpdateRequestDTO.getAddress().isBlank()) {
             patient.setAddress(patientUpdateRequestDTO.getAddress());
         }
-        if (patientUpdateRequestDTO.getDateOfBirth() != null) {
+        if (patientUpdateRequestDTO.getDateOfBirth() != null && !patientUpdateRequestDTO.getDateOfBirth().isBlank()) {
             patient.setDateOfBirth(LocalDate.parse(patientUpdateRequestDTO.getDateOfBirth()));
         }
 
